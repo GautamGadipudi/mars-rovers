@@ -1,6 +1,7 @@
 package Rover.Router;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.StandardSocketOptions;
 
@@ -9,6 +10,7 @@ public class Router {
     RouterConfig routerConfig;
     MulticastSocket multicastSocket;
     RoutingTable routingTable;
+    Sender sender;
 
     public Router(byte roverId) {
         this.routerConfig = new RouterConfig(roverId);
@@ -24,6 +26,4 @@ public class Router {
 
         this.routingTable = new RoutingTable(routerConfig);
     }
-
-
 }

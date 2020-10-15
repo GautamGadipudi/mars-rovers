@@ -14,6 +14,10 @@ public class RoutingTable {
         return this.Entries.size();
     }
 
+    public List<RoutingTableEntry> getEntries() {
+        return Entries;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
