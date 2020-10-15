@@ -1,10 +1,10 @@
-package Classes;
+package Rover.Router;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public final class RoverConfig {
+public final class RouterConfig {
 
     String MulticastIP = "224.0.0.9";
     int PortNumber = 1337;
@@ -14,9 +14,9 @@ public final class RoverConfig {
     byte RoverId;
     String Address;
 
-    public RoverConfig(byte roverId) {
+    public RouterConfig(byte roverId) {
         this.RoverId = roverId;
-        this.Address = getAddress(roverId);
+        this.Address = getAddress();
     }
 
     public int getPortNumber() {
@@ -27,8 +27,12 @@ public final class RoverConfig {
         return MulticastIP;
     }
 
-    public String getAddress (byte roverId) {
-        Collections.replaceAll(AddressTemplate, "-1", Byte.toString(roverId));
+    public byte getRoverId() {
+        return RoverId;
+    }
+
+    public String getAddress () {
+        Collections.replaceAll(AddressTemplate, "-1", Byte.toString(this.RoverId));
 
         return String.join(".", AddressTemplate);
     }

@@ -1,26 +1,25 @@
-package Classes;
+package Rover.Router;
 
 /**
  * This class contains information of an entry in the routing table.
  *
  */
 public class RoutingTableEntry {
-    byte RouterId;
-    String Address;
+    RouterConfig RouterConfig;
     byte NextHopRouterId;
     String NextHopRouterIPAddress;
     byte Cost;
 
-    public RoutingTableEntry(byte routerId, String address, String nextHopRouterIPAddress) {
-        this.RouterId = routerId;
-        this.Address = address;
-        this.NextHopRouterId = routerId;
-        this.NextHopRouterIPAddress = nextHopRouterIPAddress;
+    public RoutingTableEntry(RouterConfig routerConfig) {
+        this.RouterConfig = routerConfig;
+        this.NextHopRouterId = routerConfig.getRoverId();
+        this.NextHopRouterIPAddress = "127.0.0.1";
+        this.Cost = 0;
     }
 
     @Override
     public String toString() {
-        return this.Address + "\t" +
+        return this.RouterConfig.getAddress() + "\t" +
                 this.NextHopRouterIPAddress + "(" + this.NextHopRouterId + ")\t" +
                 this.Cost;
     }

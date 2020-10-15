@@ -1,12 +1,13 @@
-package Classes;
+package Rover.Router;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RoutingTable {
-    ArrayList<RoutingTableEntry> Entries;
+    List<RoutingTableEntry> Entries;
 
-    public RoutingTable() {
-        this.Entries = new ArrayList<>();
+    public RoutingTable(RouterConfig routerConfig) {
+        Entries = Arrays.asList(new RoutingTableEntry(routerConfig));
     }
 
     public int getSize() {
