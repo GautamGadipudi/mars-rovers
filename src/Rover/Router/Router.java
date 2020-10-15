@@ -25,12 +25,5 @@ public class Router {
         this.routingTable = new RoutingTable(routerConfig);
     }
 
-    public byte getId() {
-        return routerConfig.getRoverId();
-    }
-
-    public String getAddress() {
-        return routerConfig.getAddress();
-    }
 
 }
