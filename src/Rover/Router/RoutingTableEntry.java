@@ -19,6 +19,14 @@ public class RoutingTableEntry {
         this.Cost = 0;
     }
 
+    public RoutingTableEntry(byte routerId, byte nextHop, String nextHopIP, byte cost) {
+        this.RouterId = routerId;
+        this.Address = "10.0." + routerId + ".0";
+        this.NextHop = nextHop;
+        this.NextHopIP = nextHopIP;
+        this.Cost = cost;
+    }
+
     public byte getRouterId() {
         return RouterId;
     }

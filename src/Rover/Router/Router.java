@@ -1,5 +1,7 @@
 package Rover.Router;
 
+import Rover.Router.RIP.RIPPacket;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
@@ -25,5 +27,10 @@ public class Router {
         }
 
         this.routingTable = new RoutingTable(routerConfig);
+    }
+
+    public DatagramPacket getDatagramPacket() {
+        byte[] packet = new RIPPacket(this.routerConfig, this.routingTable).createRIPPacketData();
+        return new DatagramPacket(packet, packet.length, multicastSocket.getInetAddress(), routerConfig.getPortNumber());
     }
 }

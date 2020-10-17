@@ -12,6 +12,32 @@ public class RIPEntry {
         this.RoutingTableEntry = routingTableEntry;
     }
 
+    public RIPEntry(byte[] data, String senderIP) {
+        int i = 0;
+
+        this.AddressFamilyIdentifier[0] = data[i++];
+        this.AddressFamilyIdentifier[1] = data[i++];
+
+        // Must be zero
+        i += 2;
+
+        byte destination = data[i++];
+        byte nextHop = data[i++];
+
+        // Must be zero
+        i += 2;
+
+        // Subnet mask
+        i += 4;
+
+        // Must be zero
+        i += 4;
+
+        byte cost = data[i];
+
+        this.RoutingTableEntry = new RoutingTableEntry(destination, nextHop, senderIP, cost);
+    }
+
     /**
      *
      *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -27,7 +53,7 @@ public class RIPEntry {
      *  +---------------------------------------------------------------+
      * @return
      */
-    public byte[] getRIPEntryData() {
+    public byte[] createRIPEntryData() {
         byte[] data = new byte[20];
 
         int i = 0;
