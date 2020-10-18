@@ -50,10 +50,11 @@ public class RIPPacket {
         buff[2] = this.routerId;
         buff[3] = 0;
 
-        for (int i = 4; i < this.ripEntries.size() + 4; i++) {
-            // To-do: CREATE RIP and append to buffer
-            byte[] ripEntryData = this.ripEntries.get(i).createRIPEntryData();
-            System.arraycopy(ripEntryData, 0, buff, i * ripEntryData.length, ripEntryData.length);
+        int i = 0;
+        for (byte key : this.ripEntries.keySet()) {
+            byte[] ripEntryData = this.ripEntries.get(key).createRIPEntryData();
+            System.arraycopy(ripEntryData, 0, buff, i * ripEntryData.length + 4, ripEntryData.length);
+            i++;
         }
 
         return buff;

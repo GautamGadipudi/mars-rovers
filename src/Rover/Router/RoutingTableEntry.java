@@ -45,8 +45,8 @@ public class RoutingTableEntry {
 
     @Override
     public String toString() {
-        return this.address + "\t" +
-                this.nextHopIP + "(" + this.nextHop + ")\t" +
+        return this.address + "\t | " +
+                this.nextHopIP + "(" + this.nextHop + ")\t | " +
                 this.cost;
     }
 }

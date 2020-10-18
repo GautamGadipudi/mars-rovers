@@ -3,9 +3,7 @@ package Rover.Router;
 import Rover.Router.RIP.RIPPacket;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.MulticastSocket;
-import java.net.StandardSocketOptions;
+import java.net.*;
 
 public class Router {
     byte id;
@@ -20,7 +18,7 @@ public class Router {
         try {
             this.multicastSocket = new MulticastSocket(routerConfig.getPortNumber());
             multicastSocket.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, false);
-            multicastSocket.joinGroup(multicastSocket.getInetAddress());
+            multicastSocket.joinGroup(InetAddress.getByName(routerConfig.MulticastIP));
         } catch (IOException e) {
             System.out.println("Unable to create multicast socket!");
             e.printStackTrace();
@@ -35,6 +33,13 @@ public class Router {
 
     public DatagramPacket createDatagramPacket() {
         byte[] packet = new RIPPacket(this.id, this.routingTable).createRIPPacketData();
-        return new DatagramPacket(packet, packet.length, multicastSocket.getInetAddress(), routerConfig.getPortNumber());
+        DatagramPacket datagramPacket = null;
+        try {
+            datagramPacket = new DatagramPacket(packet, packet.length, InetAddress.getByName(routerConfig.MulticastIP), routerConfig.getPortNumber());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return datagramPacket;
     }
 }

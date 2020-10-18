@@ -3,8 +3,9 @@ package Rover.Router;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
+import java.util.TimerTask;
 
-public class Sender implements Runnable {
+public class Sender extends TimerTask implements Runnable {
     MulticastSocket socket;
     Router Router;
 

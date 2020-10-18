@@ -22,7 +22,7 @@ public class RoutingTable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Address\tNext Hop\tCost\n");
+        sb.append("Address\t | Next Hop\t | Cost\n");
         sb.append("===============================================\n");
         for(byte key : entries.keySet()) {
             sb.append(entries.get(key) + "\n");

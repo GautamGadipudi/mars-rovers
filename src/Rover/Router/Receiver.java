@@ -8,7 +8,7 @@ import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.util.HashMap;
 
-public class Receiver implements Runnable {
+public class Receiver extends Thread {
     Router router;
     MulticastSocket socket;
 
