@@ -8,13 +8,13 @@ import java.net.MulticastSocket;
 import java.net.StandardSocketOptions;
 
 public class Router {
-
+    byte id;
     RouterConfig routerConfig;
     MulticastSocket multicastSocket;
     RoutingTable routingTable;
-    Sender sender;
 
     public Router(byte roverId) {
+        this.id = roverId;
         this.routerConfig = new RouterConfig(roverId);
 
         try {
@@ -26,11 +26,15 @@ public class Router {
             e.printStackTrace();
         }
 
-        this.routingTable = new RoutingTable(routerConfig);
+        this.routingTable = new RoutingTable(roverId);
     }
 
-    public DatagramPacket getDatagramPacket() {
-        byte[] packet = new RIPPacket(this.routerConfig, this.routingTable).createRIPPacketData();
+    public void printRouterTable() {
+        System.out.println(this.routingTable);
+    }
+
+    public DatagramPacket createDatagramPacket() {
+        byte[] packet = new RIPPacket(this.id, this.routingTable).createRIPPacketData();
         return new DatagramPacket(packet, packet.length, multicastSocket.getInetAddress(), routerConfig.getPortNumber());
     }
 }

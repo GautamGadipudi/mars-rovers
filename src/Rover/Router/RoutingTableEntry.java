@@ -5,48 +5,48 @@ package Rover.Router;
  *
  */
 public class RoutingTableEntry {
-    byte RouterId;
-    String Address;
-    byte NextHop;
-    String NextHopIP;
-    byte Cost;
+    byte routerId;
+    String address;
+    byte nextHop;
+    String nextHopIP;
+    byte cost;
 
     public RoutingTableEntry(RouterConfig routerConfig) {
-        this.RouterId = routerConfig.getRoverId();
-        this.Address = routerConfig.getAddress();
-        this.NextHop = routerConfig.getRoverId();
-        this.NextHopIP = "127.0.0.1";
-        this.Cost = 0;
+        this.routerId = routerConfig.getRouterId();
+        this.address = routerConfig.getAddress();
+        this.nextHop = routerConfig.getRouterId();
+        this.nextHopIP = "127.0.0.1";
+        this.cost = 0;
     }
 
     public RoutingTableEntry(byte routerId, byte nextHop, String nextHopIP, byte cost) {
-        this.RouterId = routerId;
-        this.Address = "10.0." + routerId + ".0";
-        this.NextHop = nextHop;
-        this.NextHopIP = nextHopIP;
-        this.Cost = cost;
+        this.routerId = routerId;
+        this.address = "10.0." + routerId + ".0";
+        this.nextHop = nextHop;
+        this.nextHopIP = nextHopIP;
+        this.cost = cost;
     }
 
     public byte getRouterId() {
-        return RouterId;
+        return routerId;
     }
 
     public String getNextHopIP() {
-        return NextHopIP;
+        return nextHopIP;
     }
 
     public byte getNextHop() {
-        return NextHop;
+        return nextHop;
     }
 
     public byte getCost() {
-        return Cost;
+        return cost;
     }
 
     @Override
     public String toString() {
-        return this.Address + "\t" +
-                this.NextHopIP + "(" + this.NextHop + ")\t" +
-                this.Cost;
+        return this.address + "\t" +
+                this.nextHopIP + "(" + this.nextHop + ")\t" +
+                this.cost;
     }
 }

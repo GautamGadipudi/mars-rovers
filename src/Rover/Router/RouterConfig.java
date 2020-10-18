@@ -11,11 +11,11 @@ public final class RouterConfig {
 
     List<String> AddressTemplate = Arrays.asList("10", "0", "-1", "0");
 
-    byte RoverId;
+    byte RouterId;
     String Address;
 
-    public RouterConfig(byte roverId) {
-        this.RoverId = roverId;
+    public RouterConfig(byte routerId) {
+        this.RouterId = routerId;
         this.Address = getAddress();
     }
 
@@ -27,12 +27,12 @@ public final class RouterConfig {
         return MulticastIP;
     }
 
-    public byte getRoverId() {
-        return RoverId;
+    public byte getRouterId() {
+        return RouterId;
     }
 
     public String getAddress () {
-        Collections.replaceAll(AddressTemplate, "-1", Byte.toString(this.RoverId));
+        Collections.replaceAll(AddressTemplate, "-1", Byte.toString(this.RouterId));
 
         return String.join(".", AddressTemplate);
     }

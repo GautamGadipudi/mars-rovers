@@ -14,7 +14,7 @@ public class Sender implements Runnable {
     }
     @Override
     public void run() {
-        DatagramPacket packet = this.Router.getDatagramPacket();
+        DatagramPacket packet = this.Router.createDatagramPacket();
         try {
             socket.send(packet);
         } catch (IOException e) {

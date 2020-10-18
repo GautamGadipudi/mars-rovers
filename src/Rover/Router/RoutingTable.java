@@ -1,21 +1,22 @@
 package Rover.Router;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class RoutingTable {
-    List<RoutingTableEntry> Entries;
+    HashMap<Byte, RoutingTableEntry> entries;
 
-    public RoutingTable(RouterConfig routerConfig) {
-        Entries = Arrays.asList(new RoutingTableEntry(routerConfig));
+    public RoutingTable(byte routerId) {
+        entries = new HashMap<>();
+        entries.put(routerId, new RoutingTableEntry(routerId, routerId, "localhost", (byte)0));
     }
 
     public int getSize() {
-        return this.Entries.size();
+        return this.entries.size();
     }
 
-    public List<RoutingTableEntry> getEntries() {
-        return Entries;
+    public HashMap<Byte, RoutingTableEntry> getEntries() {
+        return entries;
     }
 
     @Override
@@ -23,8 +24,8 @@ public class RoutingTable {
         StringBuilder sb = new StringBuilder();
         sb.append("Address\tNext Hop\tCost\n");
         sb.append("===============================================\n");
-        for(RoutingTableEntry entry : Entries) {
-            sb.append(entry + "\n");
+        for(byte key : entries.keySet()) {
+            sb.append(entries.get(key) + "\n");
         }
 
         return sb.toString();

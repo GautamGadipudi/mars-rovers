@@ -1,28 +1,23 @@
 package Rover.Router.RIP;
 
-import Rover.Router.RouterConfig;
-import Rover.Router.RoutingTableEntry;
-
 public class RIPEntry {
-    byte[] AddressFamilyIdentifier;
-    RoutingTableEntry RoutingTableEntry;
+    byte[] addressFamilyIdentifier;
 
-    public RIPEntry(RoutingTableEntry routingTableEntry) {
-        this.AddressFamilyIdentifier = new byte[]{0, 2};
-        this.RoutingTableEntry = routingTableEntry;
-    }
+    byte destination;
+    byte nextHop;
+    byte cost;
 
-    public RIPEntry(byte[] data, String senderIP) {
+    public RIPEntry(byte[] data) {
         int i = 0;
 
-        this.AddressFamilyIdentifier[0] = data[i++];
-        this.AddressFamilyIdentifier[1] = data[i++];
+        this.addressFamilyIdentifier[0] = data[i++];
+        this.addressFamilyIdentifier[1] = data[i++];
 
         // Must be zero
         i += 2;
 
-        byte destination = data[i++];
-        byte nextHop = data[i++];
+        this.destination = data[i++];
+        this.nextHop = data[i++];
 
         // Must be zero
         i += 2;
@@ -33,9 +28,14 @@ public class RIPEntry {
         // Must be zero
         i += 4;
 
-        byte cost = data[i];
+        this.cost = data[i];
+    }
 
-        this.RoutingTableEntry = new RoutingTableEntry(destination, nextHop, senderIP, cost);
+    public RIPEntry(byte destination, byte nextHop, byte cost) {
+        this.addressFamilyIdentifier = new byte[]{0, 2};
+        this.destination = destination;
+        this.nextHop = nextHop;
+        this.cost = cost;
     }
 
     /**
@@ -58,18 +58,18 @@ public class RIPEntry {
 
         int i = 0;
         // address family identifier
-        data[i++] = this.AddressFamilyIdentifier[0];
-        data[i++] = this.AddressFamilyIdentifier[1];
+        data[i++] = this.addressFamilyIdentifier[0];
+        data[i++] = this.addressFamilyIdentifier[1];
 
         // must be zero
         data[i++] = 0;
         data[i++] = 0;
 
         // destination router id
-        data[i++] = this.RoutingTableEntry.getRouterId();
+        data[i++] = this.destination;
 
         // next hop
-        data[i++] = this.RoutingTableEntry.getNextHop();
+        data[i++] = this.nextHop;
 
         // must be zero
         i += 2;
@@ -82,8 +82,20 @@ public class RIPEntry {
         // must be zero
         i += 4;
 
-        data[i++] = this.RoutingTableEntry.getCost();
+        data[i++] = this.cost;
 
         return data;
+    }
+
+    public byte getCost() {
+        return cost;
+    }
+
+    public byte getDestination() {
+        return destination;
+    }
+
+    public byte getNextHop() {
+        return nextHop;
     }
 }

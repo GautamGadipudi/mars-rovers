@@ -1,38 +1,23 @@
 package Rover.Router.RIP;
 
-import Rover.Router.RouterConfig;
 import Rover.Router.RoutingTable;
 import Rover.Router.RoutingTableEntry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class RIPPacket {
-    byte Command;
-    byte Version;
-    byte RouterId;
+    byte command;
+    byte version;
+    byte routerId;
 
-    List<RIPEntry> RIPEntries;
+    HashMap<Byte, RIPEntry> ripEntries;
 
-    public RIPPacket(RouterConfig routerConfig, RoutingTable routingTable) {
-        this.Command = 2;
-        this.Version = 2;
+    public RIPPacket(byte[] data) {
+        this.command = data[0];
+        this.version = data[1];
+        this.routerId = data[2];
 
-        this.RouterId = routerConfig.getRoverId();
-        this.RIPEntries = new ArrayList<>();
-
-        List<RoutingTableEntry> routingTableEntries = routingTable.getEntries();
-        for (RoutingTableEntry routingTableEntry : routingTableEntries) {
-            this.RIPEntries.add(new RIPEntry(routingTableEntry));
-        }
-    }
-
-    public RIPPacket(byte[] data, String senderIP) {
-        this.Command = data[0];
-        this.Version = data[1];
-        this.RouterId = data[2];
-
-        this.RIPEntries = new ArrayList<>();
+        this.ripEntries = new HashMap<>();
 
         int entryCount = (data.length - 4) / 20;
 
@@ -40,24 +25,41 @@ public class RIPPacket {
             int j = i * 20 + 4;
             byte[] ripEntryData = new byte[20];
             System.arraycopy(data, j, ripEntryData, 0, 20);
-            this.RIPEntries.add(new RIPEntry(ripEntryData, senderIP));
+            this.ripEntries.put(this.routerId, new RIPEntry(ripEntryData));
+        }
+    }
+
+    public RIPPacket(byte routerId, RoutingTable routingTable) {
+        HashMap<Byte, RoutingTableEntry> routingTableEntries = routingTable.getEntries();
+        this.command = 1;
+        this.version = 2;
+        this.routerId = routerId;
+
+        this.ripEntries = new HashMap<>();
+        for (byte key : routingTableEntries.keySet()) {
+            RoutingTableEntry routingTableEntry = routingTableEntries.get(key);
+            ripEntries.put(key, new RIPEntry(routingTableEntry.getRouterId(), routingTableEntry.getNextHop(), routingTableEntry.getCost()));
         }
     }
 
     public byte[] createRIPPacketData() {
         byte[] buff = new byte[512];
 
-        buff[0] = this.Command;
-        buff[1] = this.Version;
-        buff[2] = this.RouterId;
+        buff[0] = this.command;
+        buff[1] = this.version;
+        buff[2] = this.routerId;
         buff[3] = 0;
 
-        for (int i = 4; i < this.RIPEntries.size() + 4; i++) {
+        for (int i = 4; i < this.ripEntries.size() + 4; i++) {
             // To-do: CREATE RIP and append to buffer
-            byte[] ripEntryData = this.RIPEntries.get(i).createRIPEntryData();
+            byte[] ripEntryData = this.ripEntries.get(i).createRIPEntryData();
             System.arraycopy(ripEntryData, 0, buff, i * ripEntryData.length, ripEntryData.length);
         }
 
         return buff;
+    }
+
+    public HashMap<Byte, RIPEntry> getRipEntries() {
+        return ripEntries;
     }
 }
