@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Receiver extends Thread {
     Router router;
     MulticastSocket socket;
 
-    HashMap<Byte, Long> neighborTimestamps = new HashMap<>();
-    HashMap<Byte, RoutingTableEntry> deletedEntries = new HashMap<>();
+    ConcurrentHashMap<Byte, Long> neighborTimestamps = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Byte, RoutingTableEntry> deletedEntries = new ConcurrentHashMap<>();
 
     public Receiver(Router router) {
         this.router = router;
@@ -32,12 +35,15 @@ public class Receiver extends Thread {
                 e.printStackTrace();
             }
             checkOffline();
+            System.out.println(this.neighborTimestamps);
             processPacket(packet);
         }
     }
 
     public void checkOffline() {
         boolean changed = false;
+
+        Iterator it = this.neighborTimestamps.entrySet().iterator();
 
         for (byte key : this.neighborTimestamps.keySet()) {
             long timeOfflineInSeconds = (System.nanoTime() - this.neighborTimestamps.get(key)) / 1000000000;
@@ -47,6 +53,7 @@ public class Receiver extends Thread {
 
                 if (isDeleted) {
                     changed = true;
+                    neighborTimestamps.remove(key);
                     System.out.println("DELETED router #" + key + " from routing table.");
                 }
             }

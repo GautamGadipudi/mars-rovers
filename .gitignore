@@ -3,3 +3,4 @@
 /MulticastTestingEnvironment
 *.iml
 .DS_Store
+out/
