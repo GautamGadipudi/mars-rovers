@@ -1,5 +1,7 @@
 package Rover.Router.RIP;
 
+import java.util.Arrays;
+
 public class RIPEntry {
     byte[] addressFamilyIdentifier;
 
@@ -10,8 +12,7 @@ public class RIPEntry {
     public RIPEntry(byte[] data) {
         int i = 0;
 
-        this.addressFamilyIdentifier[0] = data[i++];
-        this.addressFamilyIdentifier[1] = data[i++];
+        this.addressFamilyIdentifier = new byte[] {data[i++], data[i++]};
 
         // Must be zero
         i += 2;
@@ -97,5 +98,15 @@ public class RIPEntry {
 
     public byte getNextHop() {
         return nextHop;
+    }
+
+    @Override
+    public String toString() {
+        return "RIPEntry{" +
+                "addressFamilyIdentifier=" + Arrays.toString(addressFamilyIdentifier) +
+                ", destination=" + destination +
+                ", nextHop=" + nextHop +
+                ", cost=" + cost +
+                '}';
     }
 }

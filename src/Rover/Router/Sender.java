@@ -1,21 +1,41 @@
 package Rover.Router;
 
+import Rover.Router.RIP.RIPPacket;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.UnknownHostException;
 import java.util.TimerTask;
 
 public class Sender extends TimerTask implements Runnable {
     MulticastSocket socket;
-    Router Router;
+    Router router;
 
     public Sender(Router router) {
-        this.Router = router;
+        this.router = router;
         this.socket = router.multicastSocket;
     }
+
+    public DatagramPacket createDatagramPacket() {
+        RIPPacket ripPacket = new RIPPacket(this.router.id, this.router.routingTable);
+
+        byte[] packet = ripPacket.createRIPPacketData();
+        DatagramPacket datagramPacket = null;
+        try {
+            datagramPacket = new DatagramPacket(packet, packet.length, InetAddress.getByName(this.router.routerConfig.MulticastIP), this.router.routerConfig.getPortNumber());
+        } catch (UnknownHostException e) {
+            System.out.println("Unable to create datagram packet!");
+            e.printStackTrace();
+        }
+
+        return datagramPacket;
+    }
+
     @Override
     public void run() {
-        DatagramPacket packet = this.Router.createDatagramPacket();
+        DatagramPacket packet = this.createDatagramPacket();
         try {
             socket.send(packet);
         } catch (IOException e) {

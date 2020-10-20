@@ -1,14 +1,13 @@
 package Rover.Router;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class RoutingTable {
     HashMap<Byte, RoutingTableEntry> entries;
 
     public RoutingTable(byte routerId) {
-        entries = new HashMap<>();
-        entries.put(routerId, new RoutingTableEntry(routerId, routerId, "localhost", (byte)0));
+        this.entries = new HashMap<>();
+        this.entries.put(routerId, new RoutingTableEntry(routerId, routerId, "localhost", (byte)0));
     }
 
     public int getSize() {
@@ -16,7 +15,7 @@ public class RoutingTable {
     }
 
     public HashMap<Byte, RoutingTableEntry> getEntries() {
-        return entries;
+        return this.entries;
     }
 
     @Override

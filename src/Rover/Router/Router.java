@@ -1,7 +1,5 @@
 package Rover.Router;
 
-import Rover.Router.RIP.RIPPacket;
-
 import java.io.IOException;
 import java.net.*;
 
@@ -29,17 +27,5 @@ public class Router {
 
     public void printRouterTable() {
         System.out.println(this.routingTable);
-    }
-
-    public DatagramPacket createDatagramPacket() {
-        byte[] packet = new RIPPacket(this.id, this.routingTable).createRIPPacketData();
-        DatagramPacket datagramPacket = null;
-        try {
-            datagramPacket = new DatagramPacket(packet, packet.length, InetAddress.getByName(routerConfig.MulticastIP), routerConfig.getPortNumber());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        return datagramPacket;
     }
 }
