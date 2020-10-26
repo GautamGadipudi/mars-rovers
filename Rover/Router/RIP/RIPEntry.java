@@ -2,6 +2,11 @@ package Rover.Router.RIP;
 
 import java.util.Arrays;
 
+/**
+ * @author gautamgadipudi
+ *
+ * RIP Packet Entry class
+ */
 public class RIPEntry {
     byte[] addressFamilyIdentifier;
 
@@ -9,6 +14,12 @@ public class RIPEntry {
     byte nextHop;
     byte cost;
 
+    /**
+     * This constructor is used by the receiver to convert RIP Entry data into
+     * its class.
+     *
+     * @param data RIP entry data of 20 bytes
+     */
     public RIPEntry(byte[] data) {
         int i = 0;
 
@@ -32,6 +43,14 @@ public class RIPEntry {
         this.cost = data[i];
     }
 
+    /**
+     * This class is used by the sender to convert routing table entry to
+     * RIPEntry class.
+     *
+     * @param destination Destination
+     * @param nextHop Next Hop
+     * @param cost Cost/Metric to get to the destination
+     */
     public RIPEntry(byte destination, byte nextHop, byte cost) {
         this.addressFamilyIdentifier = new byte[]{0, 2};
         this.destination = destination;
@@ -40,19 +59,20 @@ public class RIPEntry {
     }
 
     /**
+     *  Create an RIP packet entry as a byte array as below:
      *
-     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     *  | address family identifier (2) | must be zero (2)              |
-     *  +-------------------------------+-------------------------------+
-     *  | dst router Id (1) | next hop router id (1) | must be zero (2) |
-     *  +---------------------------------------------------------------+
-     *  | subnet mask (4)                                               |
-     *  +---------------------------------------------------------------+
-     *  | must be zero (4)                                              |
-     *  +---------------------------------------------------------------+
-     *  | metric (1) | must be zero (3)                                 |
-     *  +---------------------------------------------------------------+
-     * @return
+     *          0                                                           4 bytes
+     *          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *          | address family identifier (2) | must be zero (2)              |
+     *          +-------------------------------+-------------------------------+
+     *          | dst router Id (1) | next hop router id (1) | must be zero (2) |
+     *          +-------------------+------------------------+------------------+
+     *          | subnet mask (4)                                               |
+     *          +---------------------------------------------------------------+
+     *          | must be zero (4)                                              |
+     *          +---------------------------------------------------------------+
+     *          | cost (1) | must be zero (3)                                   |
+     *          +----------+----------------------------------------------------+
      */
     public byte[] createRIPEntryData() {
         byte[] data = new byte[20];
@@ -100,6 +120,11 @@ public class RIPEntry {
         return nextHop;
     }
 
+    /**
+     * Used just to debug. Has no significance otherwise.
+     *
+     * @return Stringified RIP Packet Entry.
+     */
     @Override
     public String toString() {
         return "RIPEntry{" +

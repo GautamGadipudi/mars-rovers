@@ -6,6 +6,11 @@ import Rover.Router.Sender;
 
 import java.util.Timer;
 
+/**
+ * @author gautamgadipudi
+ *
+ * Rover class
+ */
 public class Rover extends Thread{
     int RoverId;
     Router Router;

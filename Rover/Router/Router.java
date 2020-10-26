@@ -3,6 +3,11 @@ package Rover.Router;
 import java.io.IOException;
 import java.net.*;
 
+/**
+ * @author gautamgadipudi
+ *
+ * This class is the router class.
+ */
 public class Router {
     byte id;
     RouterConfig routerConfig;
@@ -25,6 +30,9 @@ public class Router {
         this.routingTable = new RoutingTable(roverId);
     }
 
+    /**
+     * Print routing table of router.
+     */
     public void printRouterTable() {
         System.out.println(this.routingTable);
     }

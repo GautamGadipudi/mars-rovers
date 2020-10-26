@@ -9,6 +9,14 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.TimerTask;
 
+/**
+ * @author gautamgadipudi
+ *
+ * Sender class
+ *
+ * Thread class that iterates over routing table, creates RIP packet and
+ * multicasts it.
+ */
 public class Sender extends TimerTask implements Runnable {
     MulticastSocket socket;
     Router router;
@@ -18,6 +26,9 @@ public class Sender extends TimerTask implements Runnable {
         this.socket = router.multicastSocket;
     }
 
+    /**
+     * Create a datagram packet from routing table.
+     */
     public DatagramPacket createDatagramPacket() {
         RIPPacket ripPacket = new RIPPacket(this.router.id, this.router.routingTable);
 

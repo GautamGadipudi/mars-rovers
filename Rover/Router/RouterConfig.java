@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author gautamgadipudi
+ *
+ * This class has all the config details for the router.
+ */
 public final class RouterConfig {
 
     String MulticastIP = "224.0.0.9";
@@ -23,14 +28,9 @@ public final class RouterConfig {
         return PortNumber;
     }
 
-    public String getMulticastIP() {
-        return MulticastIP;
-    }
-
-    public byte getRouterId() {
-        return RouterId;
-    }
-
+    /**
+     * Replace -1 in AddressTemplate with router id.
+     */
     public String getAddress () {
         Collections.replaceAll(AddressTemplate, "-1", Byte.toString(this.RouterId));
 

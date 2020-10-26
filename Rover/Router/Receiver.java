@@ -7,10 +7,16 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author gautamgadipudi
+ *
+ * Receiver class.
+ *
+ * Thread class that recieves RIP packets, processes them and updates routing
+ * table accordingly.
+ */
 public class Receiver extends Thread {
     Router router;
     MulticastSocket socket;
@@ -40,10 +46,11 @@ public class Receiver extends Thread {
         }
     }
 
+    /**
+     * Process any offline routers and delete them.
+     */
     public void checkOffline() {
         boolean changed = false;
-
-        Iterator it = this.neighborTimestamps.entrySet().iterator();
 
         for (byte key : this.neighborTimestamps.keySet()) {
             long timeOfflineInSeconds = (System.nanoTime() - this.neighborTimestamps.get(key)) / 1000000000;
@@ -65,6 +72,13 @@ public class Receiver extends Thread {
         }
     }
 
+    /**
+     * Delete a routing table entry of given id from routing table.
+     *
+     * @param routerId
+     *
+     * @return isDeleted Confirmation of deletion.
+     */
     public boolean deleteEntry(byte routerId) {
         try {
             RoutingTableEntry entry = this.router.routingTable.entries.get(routerId);
@@ -85,6 +99,11 @@ public class Receiver extends Thread {
         }
     }
 
+    /**
+     * Process the packet received from other or same router.
+     *
+     * @param packet
+     */
     public void processPacket(DatagramPacket packet) {
         byte[] data = packet.getData();
         String ipAddress = packet.getAddress().toString();
@@ -120,21 +139,18 @@ public class Receiver extends Thread {
 
                     // If better cost in reaching destination found
                     if (routingTableEntry.cost > sentCost + 1) {
+                        routingTableEntry.setNextHop(ripEntry.getNextHop());
                         routingTableEntry.cost = (byte) (sentCost + 1);
                         this.router.routingTable.entries.put(routingTableEntry.routerId, routingTableEntry);
                         change = true;
                     }
                     // If better cost in reaching destination NOT found
                     else {
-                        if (routingTableEntry.nextHop == ripEntry.getNextHop() && sentCost == 16) {
+                        if (sentCost == 16) {
                             routingTableEntry.cost = 16;
                             this.router.routingTable.entries.put(routingTableEntry.routerId, routingTableEntry);
                             change = true;
                         }
-//                        else if (routingTableEntry.nextHop == ripEntry.getNextHop() && sentCost != 16) {
-//                            routingTableEntry.cost = (byte) (sentCost + 1);
-//                            this.router.routingTable.entries.put(routingTableEntry.routerId, routingTableEntry);
-//                        }
                     }
                 }
             }
@@ -145,12 +161,16 @@ public class Receiver extends Thread {
             }
         }
 
+        // If any change, print router table and trigger and update.
         if (change) {
             this.router.printRouterTable();
             triggerUpdate();
         }
     }
 
+    /**
+     * Create a new Sender thread.
+     */
     public void triggerUpdate(){
         new Thread(new Sender(this.router)).start();
     }

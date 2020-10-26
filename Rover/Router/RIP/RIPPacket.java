@@ -5,6 +5,11 @@ import Rover.Router.RoutingTableEntry;
 
 import java.util.HashMap;
 
+/**
+ * @author gautamgadipudi
+ *
+ * RIP Packet class
+ */
 public class RIPPacket {
     byte command;
     byte version;
@@ -13,6 +18,12 @@ public class RIPPacket {
 
     HashMap<Byte, RIPEntry> ripEntries;
 
+    /**
+     * This constructor is used by receiver to convert byte array data to
+     * RIPPacket class.
+     *
+     * @param data RIP Packet data
+     */
     public RIPPacket(byte[] data) {
         this.command = data[0];
         this.version = data[1];
@@ -30,9 +41,17 @@ public class RIPPacket {
         }
     }
 
+    /**
+     * This constructor is used by sender to create an RIP Packet object from
+     * routing table.
+     *
+     * @param routerId Router Id
+     * @param routingTable Routing Table
+     */
     public RIPPacket(byte routerId, RoutingTable routingTable) {
         HashMap<Byte, RoutingTableEntry> routingTableEntries = routingTable.getEntries();
-        this.command = 1;
+
+        this.command = 2;
         this.version = 2;
         this.routerId = routerId;
         this.ripEntriesCount = (byte)routingTable.getSize();
@@ -44,6 +63,18 @@ public class RIPPacket {
         }
     }
 
+    /**
+     *  Create an RIP packet as a byte array as below:
+     *
+     *        0                                                                     4 bytes
+     *       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *       |  command (1)  |  version (1)  |  router id (1)   | rip entries count (1) |
+     *       +---------------+---------------+------------------+-----------------------+
+     *       |                                                                          |
+     *       ~                         RIP Entry (20)                                   ~
+     *       |                                                                          |
+     *       +---------------+---------------+---------------+--------------------------+
+     */
     public byte[] createRIPPacketData() {
         byte[] buff = new byte[512];
 
@@ -70,6 +101,11 @@ public class RIPPacket {
         return routerId;
     }
 
+    /**
+     * Used just to debug. Has no significance otherwise.
+     *
+     * @return Stringified RIP Packet
+     */
     @Override
     public String toString() {
         StringBuilder ripEntriesString = new StringBuilder();

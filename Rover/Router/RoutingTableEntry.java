@@ -1,6 +1,8 @@
 package Rover.Router;
 
 /**
+ * @author gautamgadipudi
+ *
  * This class contains information of an entry in the routing table.
  *
  */
@@ -11,14 +13,14 @@ public class RoutingTableEntry {
     String nextHopIP;
     byte cost;
 
-    public RoutingTableEntry(RouterConfig routerConfig) {
-        this.routerId = routerConfig.getRouterId();
-        this.address = routerConfig.getAddress();
-        this.nextHop = routerConfig.getRouterId();
-        this.nextHopIP = "127.0.0.1";
-        this.cost = 0;
-    }
-
+    /**
+     * Initialize a routing table entry.
+     *
+     * @param routerId Router Id
+     * @param nextHop Next Hop Router Id
+     * @param nextHopIP Next Hop Router IP
+     * @param cost Cost to get to the next hop
+     */
     public RoutingTableEntry(byte routerId, byte nextHop, String nextHopIP, byte cost) {
         this.routerId = routerId;
         this.address = "10.0." + routerId + ".0";
@@ -31,8 +33,8 @@ public class RoutingTableEntry {
         return routerId;
     }
 
-    public String getNextHopIP() {
-        return nextHopIP;
+    public void setNextHop(byte nextHop) {
+        this.nextHop = nextHop;
     }
 
     public byte getNextHop() {
@@ -43,6 +45,11 @@ public class RoutingTableEntry {
         return cost;
     }
 
+    /**
+     * Used to print routing table
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return this.address + "\t | " +
